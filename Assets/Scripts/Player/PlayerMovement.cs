@@ -2,6 +2,44 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
+
+public sealed class jugador : MonoBehaviour
+{
+
+}
+public class enemigo 
+{
+}
+namespace herramientas
+{
+    namespace calculos
+    {
+        public class ejemplo
+        {
+            public void MetodoEjemplo()
+            {
+                jugador j;
+            }
+        }
+    }
+}
+
+public class ejemplo
+{
+}
+namespace herramientas
+{
+    namespace calculos
+    {
+        public class ejemplicio
+        {
+            public void Metodoejemplicio()
+            {
+                jugador x;
+            }
+        }
+    }
+}
 public sealed class PlayerMovement : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float moveSpeed = 3f;
@@ -148,3 +186,8 @@ public sealed class PlayerMovement : MonoBehaviour
         }
     }
 }
+
+namespace conectividad;
+    public partial class Herramienta{
+        
+    }
