@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -16,6 +17,11 @@ public class Jugador : MonoBehaviour
     [SerializeField] private float velocidadMovimiento = 3f;
     [SerializeField] private float fuerzaSalto = 7f;
 
+    [Header("Interfaz")]
+    [SerializeField] private TMP_Text textoContadorAbejas;
+
+    private int cantidadAbejas;
+
     private readonly HashSet<Collider2D> superficiesDeSuelo = new();
     private Rigidbody2D cuerpoRigido;
     private SpriteRenderer renderizadorSprite;
@@ -29,6 +35,8 @@ public class Jugador : MonoBehaviour
         cuerpoRigido = GetComponent<Rigidbody2D>();
         renderizadorSprite = GetComponent<SpriteRenderer>();
         animador = GetComponent<Animator>();
+        cantidadAbejas = 0;
+        ActualizarTextoContador();
     }
 
     private void Update()
@@ -145,6 +153,15 @@ public class Jugador : MonoBehaviour
         }
     }
 
+    // Mantiene sincronizado el valor visible con la cantidad recogida.
+    private void ActualizarTextoContador()
+    {
+        if (textoContadorAbejas != null)
+        {
+            textoContadorAbejas.text = cantidadAbejas.ToString();
+        }
+    }
+
     // Retira la abeja de la escena cuando el jugador entra en su área de recolección.
     private void OnTriggerEnter2D(Collider2D otroColisionador)
     {
@@ -153,6 +170,8 @@ public class Jugador : MonoBehaviour
             return;
         }
 
+        cantidadAbejas++;
+        ActualizarTextoContador();
         Destroy(otroColisionador.gameObject);
     }
 
