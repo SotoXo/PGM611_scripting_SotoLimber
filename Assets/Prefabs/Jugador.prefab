@@ -105,7 +105,7 @@ Animator:
   m_GameObject: {fileID: 6918448692336458444}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: -4376293155609064788, guid: 904a7ac851057b84d80e40f02e80585b, type: 3}
+  m_Controller: {fileID: 9100000, guid: c44a658ea0540fc43a1cf3031ca1e370, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -193,5 +193,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 239dc72eeb62f4845b73a380c3d11009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Jugador
-  velocidadMovimiento: 5
+  velocidadMovimiento: 3
   fuerzaSalto: 3.4

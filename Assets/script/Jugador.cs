@@ -4,15 +4,22 @@ using UnityEngine;
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(Animator))]
 public class Jugador : MonoBehaviour
 {
+    // Los identificadores coinciden con los parámetros configurados en PjController.
+    private static readonly int IdentificadorVelocidad = Animator.StringToHash("Velocidad");
+    private static readonly int IdentificadorVelocidadVertical = Animator.StringToHash("VelocidadVertical");
+    private static readonly int IdentificadorEstaEnPiso = Animator.StringToHash("estaEnPiso");
+
     [Header("Movimiento")]
-    [SerializeField] private float velocidadMovimiento = 5f;
+    [SerializeField] private float velocidadMovimiento = 3f;
     [SerializeField] private float fuerzaSalto = 7f;
 
     private readonly HashSet<Collider2D> superficiesDeSuelo = new();
     private Rigidbody2D cuerpoRigido;
     private SpriteRenderer renderizadorSprite;
+    private Animator animador;
     private float direccionHorizontal;
     private bool estaEnSuelo;
     private bool saltoSolicitado;
@@ -21,12 +28,14 @@ public class Jugador : MonoBehaviour
     {
         cuerpoRigido = GetComponent<Rigidbody2D>();
         renderizadorSprite = GetComponent<SpriteRenderer>();
+        animador = GetComponent<Animator>();
     }
 
     private void Update()
     {
         LeerMovimientoHorizontal();
         ActualizarOrientacion();
+        ActualizarAnimaciones();
 
         if (Input.GetKeyDown(KeyCode.Space) && estaEnSuelo)
         {
@@ -75,6 +84,14 @@ public class Jugador : MonoBehaviour
         }
 
         renderizadorSprite.flipX = direccionHorizontal < 0f;
+    }
+
+    // Sincroniza el Animator con la velocidad y el contacto real con el suelo.
+    private void ActualizarAnimaciones()
+    {
+        animador.SetFloat(IdentificadorVelocidad, Mathf.Abs(cuerpoRigido.linearVelocity.x));
+        animador.SetFloat(IdentificadorVelocidadVertical, cuerpoRigido.linearVelocity.y);
+        animador.SetBool(IdentificadorEstaEnPiso, estaEnSuelo);
     }
 
     private void OnCollisionEnter2D(Collision2D colision)
