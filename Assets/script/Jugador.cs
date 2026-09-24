@@ -144,4 +144,16 @@ public class Jugador : MonoBehaviour
             saltoSolicitado = false;
         }
     }
+
+    // Retira la abeja de la escena cuando el jugador entra en su área de recolección.
+    private void OnTriggerEnter2D(Collider2D otroColisionador)
+    {
+        if (!otroColisionador.CompareTag("abejita"))
+        {
+            return;
+        }
+
+        Destroy(otroColisionador.gameObject);
+    }
+
 }
