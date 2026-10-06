@@ -29,6 +29,7 @@ public class Jugador : MonoBehaviour
     private float direccionHorizontal;
     private bool estaEnSuelo;
     private bool saltoSolicitado;
+    private bool enRetroceso = false;
 
     private void Awake()
     {
@@ -41,8 +42,11 @@ public class Jugador : MonoBehaviour
 
     private void Update()
     {
-        LeerMovimientoHorizontal();
-        ActualizarOrientacion();
+        if (!enRetroceso)
+        {
+            LeerMovimientoHorizontal();
+            ActualizarOrientacion();
+        }
         ActualizarAnimaciones();
 
         if (Input.GetKeyDown(KeyCode.Space) && estaEnSuelo)
@@ -53,10 +57,13 @@ public class Jugador : MonoBehaviour
 
     private void FixedUpdate()
     {
-        cuerpoRigido.linearVelocity = new Vector2(
-            direccionHorizontal * velocidadMovimiento,
-            cuerpoRigido.linearVelocity.y
-        );
+        if (!enRetroceso)
+        {
+            cuerpoRigido.linearVelocity = new Vector2(
+                direccionHorizontal * velocidadMovimiento,
+                cuerpoRigido.linearVelocity.y
+            );
+        }
 
         if (!saltoSolicitado)
         {
@@ -162,17 +169,37 @@ public class Jugador : MonoBehaviour
         }
     }
 
-    // Retira la abeja de la escena cuando el jugador entra en su área de recolección.
+    // Recoge abejas y aplica el retroceso al pisar un caracol.
     private void OnTriggerEnter2D(Collider2D otroColisionador)
     {
-        if (!otroColisionador.CompareTag("abejita"))
+        if (otroColisionador.CompareTag("abejita"))
         {
-            return;
+            cantidadAbejas++;
+            ActualizarTextoContador();
+            Destroy(otroColisionador.gameObject);
         }
 
-        cantidadAbejas++;
-        ActualizarTextoContador();
-        Destroy(otroColisionador.gameObject);
+        if (otroColisionador.CompareTag("caracol"))
+        {
+            enRetroceso = true;
+            Vector2 arrastre = (cuerpoRigido.position -
+                (Vector2)otroColisionador.transform.position).normalized * 3;
+            cuerpoRigido.linearVelocity = Vector2.zero;
+            cuerpoRigido.AddForce(arrastre, ForceMode2D.Impulse);
+
+            Collider2D[] colisionadores = otroColisionador.GetComponents<Collider2D>();
+            foreach (Collider2D colisionador in colisionadores)
+                colisionador.enabled = false;
+
+            otroColisionador.GetComponent<Animator>().enabled = true;
+            Destroy(otroColisionador.gameObject, 0.4f);
+            Invoke(nameof(QuitarRetroceso), 0.2f);
+        }
+    }
+
+    private void QuitarRetroceso()
+    {
+        enRetroceso = false;
     }
 
 }
