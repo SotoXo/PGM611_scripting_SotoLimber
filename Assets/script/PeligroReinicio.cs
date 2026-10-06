@@ -5,8 +5,14 @@ public class PeligroReinicio : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D otroColisionador)
     {
-        if (otroColisionador.GetComponent<Jugador>() != null)
+        Jugador jugador = otroColisionador.GetComponent<Jugador>();
+        if (jugador != null)
         {
+            if (CompareTag("puerquito"))
+            {
+                jugador.audioSource.PlayOneShot(jugador.audioPuerquito);
+            }
+
             ReiniciarNivel();
         }
     }

@@ -30,6 +30,10 @@ public class Jugador : MonoBehaviour
     private bool estaEnSuelo;
     private bool saltoSolicitado;
     private bool enRetroceso = false;
+    public AudioSource audioSource;
+    public AudioClip audioPuerquito;
+    public AudioClip audioCaracol;
+    public AudioClip audioAbeja;
 
     private void Awake()
     {
@@ -174,6 +178,7 @@ public class Jugador : MonoBehaviour
     {
         if (otroColisionador.CompareTag("abejita"))
         {
+            audioSource.PlayOneShot(audioAbeja);
             cantidadAbejas++;
             ActualizarTextoContador();
             Destroy(otroColisionador.gameObject);
@@ -181,6 +186,7 @@ public class Jugador : MonoBehaviour
 
         if (otroColisionador.CompareTag("caracol"))
         {
+            audioSource.PlayOneShot(audioCaracol);
             enRetroceso = true;
             Vector2 arrastre = (cuerpoRigido.position -
                 (Vector2)otroColisionador.transform.position).normalized * 3;
