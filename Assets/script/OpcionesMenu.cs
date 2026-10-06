@@ -7,4 +7,9 @@ public class OpcionesMenu : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    public void salirDelJuego()
+    {
+        Application.Quit();
+    }
 }
